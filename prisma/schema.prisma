@@ -13,9 +13,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Task {
+model Game {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  releaseDate DateTime @default(now())
+  editor      Editor   @relation(fields: [editorId], references: [id])
+  genre       Genre   @relation(fields: [genreId], references: [id])
+  genreId     Int 
+  editorId    Int 
+}
+
+model Genre {
   id        Int      @id @default(autoincrement())
-  title     String
-  isDone    Boolean  @default(false)
-  createdAt DateTime @default(now())
+  name      String
+  game      Game[] 
+  }
+
+
+model Editor {
+  id        Int        @id @default(autoincrement())
+  name      String
+  game      Game[] 
 }

@@ -40,13 +40,14 @@ app.get("/games", async (req, res) => {
 });
 
 app.get("/games/:id", async (req, res) => {
+    const id = req.params.id;
     res.render("games/detailsGame", {
-        //req.params.id,
+        id,
     });
 });
 
-app.get("/newGame", async (req, res) => {
-    res.render("games/newGame");
+app.get("/newgame", async (req, res) => {
+    res.render("games/newgame");
 });
 
 app.listen(PORT, () => {
