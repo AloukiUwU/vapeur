@@ -1,18 +1,54 @@
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="../css/global.css" />
-    </head>
-    <body>
-        <h1>Voici tous les jeux !</h1>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liste des Jeux</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; }
+    .filter { margin: 20px 0; }
+    .game { margin: 10px 0; }
+    .game a { text-decoration: none; color: blue; }
+    .game a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Liste des Jeux</h1>
 
-        <ul>
-            {{#each games}}
-                <li>
-                    <a href="/games/{{id}}">{{title}}</a> // on accède directement aux propriétés de l'objet courant
-                </li>
-            {{/each}}
-        </ul>
-    </body>
+  <!-- Section des Filtres -->
+  <div class="filter">
+    <form id="filterForm" method="GET" action="/games">
+      <!-- Dropdown pour le Genre -->
+      <label for="genre">Genre:</label>
+      <select id="genre" name="genre" onchange="document.getElementById('filterForm').submit()">
+        <option value="">Tous</option>
+        {{#each genres}}
+          <option value="{{name}}" {{#if ../selectedGenre}}{{#if (eq ../selectedGenre name)}}selected{{/if}}{{/if}}>
+            {{name}}
+          </option>
+        {{/each}}
+      </select>
+
+      <!-- Dropdown pour l'Éditeur -->
+      <label for="editor">Éditeur:</label>
+      <select id="editor" name="editor" onchange="document.getElementById('filterForm').submit()">
+        <option value="">Tous</option>
+        {{#each editors}}
+          <option value="{{name}}" {{#if ../selectedEditor}}{{#if (eq ../selectedEditor name)}}selected{{/if}}{{/if}}>
+            {{name}}
+          </option>
+        {{/each}}
+      </select>
+    </form>
+  </div>
+
+  <!-- Liste des Jeux -->
+  <ul>
+    {{#each games}}
+      <li class="game">
+        <a href="/games/{{id}}">{{title}}</a> - {{editor.name}}
+      </li>
+    {{/each}}
+  </ul>
+</body>
 </html>

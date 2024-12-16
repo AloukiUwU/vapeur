@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{game.title}} - Détails</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; }
+    .game-info { margin-bottom: 20px; }
+    .game-info h1 { margin: 0; }
+    .game-info p { margin: 5px 0; }
+    .links a { text-decoration: none; color: blue; }
+    .links a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="game-info">
+    <h1>{{game.title}}</h1>
+    <p><strong>Description :</strong> {{game.description}}</p>
+    <p><strong>Publié le :</strong> {{game.releaseDate}}</p>
+
+    <!-- Lien vers le genre -->
+    <p><strong>Genre :</strong> 
+      <a href="/genres/{{game.genre.id}}">{{game.genre.name}}</a>
+    </p>
+
+    <!-- Lien vers l'éditeur -->
+    <p><strong>Éditeur :</strong> 
+      <a href="/editors/{{game.editor.id}}">{{game.editor.name}}</a>
+    </p>
+
+   
+  </div>
+</body>
+</html>

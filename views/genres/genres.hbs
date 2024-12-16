@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liste des Genres</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; }
+    .genre { margin: 10px 0; }
+    .genre a { text-decoration: none; color: blue; }
+    .genre a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Liste des Genres</h1>
+  <ul>
+    {{#each genres}}
+      <li class="genre">
+        <a href="/genres/{{id}}">{{name}}</a>
+      </li>
+    {{/each}}
+  </ul>
+</body>
+</html>

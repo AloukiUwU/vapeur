@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liste des Éditeurs</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; }
+    .editor { margin: 10px 0; }
+    .editor a { text-decoration: none; color: blue; }
+    .editor a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Liste des Éditeurs</h1>
+  <ul>
+    {{#each editors}}
+      <li class="editor">
+        <a href="/editors/{{id}}">{{name}}</a>
+      </li>
+    {{/each}}
+  </ul>
+</body>
+</html>

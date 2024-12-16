@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{genre.name}} - Jeux</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; }
+    .game { margin: 10px 0; }
+    .game a { text-decoration: none; color: blue; }
+    .game a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <h1>Jeux de {{genre.name}}</h1>
+  <ul>
+    {{#each genre.game}}
+      <li class="game">
+        <a href="/games/{{id}}">{{title}}</a> - {{editor.name}}
+      </li>
+    {{/each}}
+  </ul>
+ 
+</body>
+</html>
