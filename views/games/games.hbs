@@ -11,7 +11,7 @@
   <!-- Section des Filtres -->
   <div class="filter">
     <form id="filterForm" method="GET" action="/games">
-      <!-- Dropdown pour le Genre -->
+      <!-- Dropdown pour séléctionner un filtre Genre -->
       <label for="genre">Genre:</label>
       <select id="genre" name="genre" onchange="document.getElementById('filterForm').submit()">
         <option value="">Tous</option>
@@ -22,7 +22,7 @@
         {{/each}}
       </select>
 
-      <!-- Dropdown pour l'Éditeur -->
+      <!-- Dropdown pour séléctionner un filtre Éditeur -->
       <label for="editor">Éditeur:</label>
       <select id="editor" name="editor" onchange="document.getElementById('filterForm').submit()">
         <option value="">Tous</option>
@@ -36,12 +36,40 @@
   </div>
 
   <!-- Liste des Jeux -->
-  <ul>
+  <ul class="gamesList">
     {{#each games}}
-      <li class="game">
-        <a href="/games/{{id}}">{{title}}</a> - {{editor.name}}
+      <li class="game" id="game-{{id}}">
+        <div>
+          <a href="/games/{{id}}">{{title}}</a> - {{editor.name}}
+        </div>
+        <button class="delete-btn" onclick="deleteGame({{id}})">Supprimer</button>
       </li>
     {{/each}}
   </ul>
+
+  <!-- Lien pour Ajouter un Jeu -->
+  <div class="add">
+    <a href="newGame">Ajouter un Jeu</a>
+  </div>
+
+  <!-- Fonction de suppression de jeu -->
+  <script>
+    async function deleteGame(gameId) {
+      if (!confirm('Voulez-vous vraiment supprimer ce jeu ?')) return;
+
+      try {
+        const response = await fetch(`/games/${gameId}`, { method: 'DELETE' });
+        if (response.ok) {
+          document.getElementById(`game-${gameId}`).remove(); // Supprime le jeu de la liste
+          alert('Jeu supprimé avec succès.');
+        } else {
+          alert('Erreur lors de la suppression du jeu.');
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+        alert('Impossible de supprimer le jeu.');
+      }
+    }
+  </script>
 </body>
 </html>

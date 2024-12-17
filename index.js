@@ -23,15 +23,39 @@ app.use(express.static('css'));
 // Helper pour vérifier l'égalité
 hbs.registerHelper('eq', (a, b) => a === b);
 
+// Enregistrer un helper Handlebars pour formater les dates
+hbs.registerHelper('formatDate', (date) => {
+  if (!date) return '';
+  const options = { year: 'numeric', month: 'short', day: '2-digit' };
+  return new Date(date).toLocaleDateString('en-US', options); // Format : Dec 07 2024
+});
+
 
 app.get("/", async (req, res) => {
     // on passe seulement le nom du fichier .hbs sans l'extention.
     // Le chemin est relatif au dossier `views`.
 
-    // const fewGames;
+    const { genre, editor } = req.query; // Récupérer les filtres depuis la requête
+
+    // Construire la condition en fonction des filtres
+    const conditions = {};
+    if (genre) conditions.genre = { name: genre }; // Filtrer par genre
+    if (editor) conditions.editor = { name: editor }; // Filtrer par éditeur
+
+    const fewGames = await prisma.game.findMany({
+      take: 4,
+      orderBy:{
+        id: 'desc',
+      },
+      where: conditions,
+      include: {
+        genre: true,
+        editor: true,
+      },
+    });
 
     res.render("accueil", { 
-        //fewGames, 
+        fewGames, 
     });
 });
 
@@ -96,12 +120,6 @@ app.get('/editors/:id', async (req, res) => {
       res.status(500).send('Erreur lors de la récupération des jeux du genre.');
     }
   });
-  
-
-
-
-
-
 
 app.get('/games', async (req, res) => {
     const { genre, editor } = req.query; // Récupérer les filtres depuis la requête
@@ -129,6 +147,8 @@ app.get('/games', async (req, res) => {
       res.status(500).send('Erreur lors de la récupération des jeux.');
     }
   });
+
+
   app.get('/games/:id', async (req, res) => {
     const { id } = req.params; // Récupérer l'ID du jeu
     try {
@@ -151,9 +171,90 @@ app.get('/games', async (req, res) => {
     }
   });
 
-app.get("/newgame", async (req, res) => {
-    res.render("games/newgame");
-});
+  app.delete('/games/:id', async (req, res) => {
+    const { id } = req.params;
+    try {
+      await prisma.game.delete({
+        where: { id: parseInt(id) },
+      });
+      res.status(200).json({ message: 'Jeu supprimé avec succès.' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Erreur lors de la suppression.' });
+    }
+  });
+
+  app.get('/newGame', async (req, res) => {
+    try {
+      const genres = await prisma.genre.findMany();
+      const editors = await prisma.editor.findMany();
+      res.render('games/newGame', { genres, editors });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Erreur lors du chargement du formulaire d’ajout.');
+    }
+  });
+
+  app.post('/games', async (req, res) => {
+    const { title, description, releaseDate, genreId, editorId } = req.body;
+  
+    try {
+      // Validation des données reçues
+      if (!title || !description || !releaseDate || !genreId || !editorId) {
+        return res.status(400).send('Tous les champs sont requis.');
+      }
+  
+      // Ajout du jeu à la base de données
+      const newGame = await prisma.game.create({
+        data: {
+          title,
+          description,
+          releaseDate: new Date(releaseDate),
+          genreId: parseInt(genreId, 10),
+          editorId: parseInt(editorId, 10),
+        },
+      });
+  
+      res.redirect(`/games/${newGame.id}`); // Redirige vers la page du nouveau jeu
+    } catch (error) {
+      console.error('Erreur lors de l’ajout du jeu:', error);
+      res.status(500).send('Une erreur est survenue lors de l’ajout du jeu.');
+    }
+  });
+  
+  
+  
+  app.get('/newEditor', async (req, res) => {
+    try {
+      res.render('editors/newEditor');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Erreur lors du chargement du formulaire d’ajout.');
+    }
+  });
+  
+  app.post('/editors', async (req, res) => {
+  const { name } = req.body;
+  
+  try {
+    // Validation des données reçues
+    if (!name) {
+      return res.status(400).send('Tous les champs sont requis.');
+    }
+  
+    // Ajout du jeu à la base de données
+    const newEditor = await prisma.editor.create({
+      data: {
+        name
+      },
+    });
+  
+    res.redirect(`/editors`); // Redirige vers la page du nouveau jeu
+  } catch (error) {
+    console.error('Erreur lors de l’ajout de l’editeur:', error);
+    res.status(500).send('Une erreur est survenue lors de l’ajout de l’editeur.');
+  }
+  });
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

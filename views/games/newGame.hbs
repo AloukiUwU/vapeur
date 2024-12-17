@@ -1,10 +1,40 @@
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="../css/global.css" />
-    </head>
-    <body>
-        <h1>C'est ici pour créer un nouveau jeu !</h1>
-    </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajouter un Jeu</title>
+</head>
+<body>
+  <h1>Ajouter un Jeu</h1>
+<form action="/games" method="POST">
+  <label for="title">Titre :</label>
+  <input type="text" id="title" name="title" required>
+
+  <label for="description">Description :</label>
+  <textarea id="description" name="description" rows="5" required></textarea>
+
+  <label for="releaseDate">Date de Sortie :</label>
+  <input type="date" id="releaseDate" name="releaseDate" required>
+
+  <label for="genreId">Genre :</label>
+  <select id="genreId" name="genreId" required>
+    <option value="">Choisir un Genre</option>
+    {{#each genres}}
+      <option value="{{id}}">{{name}}</option>
+    {{/each}}
+  </select>
+
+  <label for="editorId">Éditeur :</label>
+  <select id="editorId" name="editorId" required>
+    <option value="">Choisir un Éditeur</option>
+    {{#each editors}}
+      <option value="{{id}}">{{name}}</option>
+    {{/each}}
+  </select>
+
+  <button type="submit">Ajouter</button>
+</form>
+
+</body>
 </html>
