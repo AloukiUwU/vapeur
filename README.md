@@ -1,5 +1,5 @@
 # Vapeur
-(done by [Denis Trimolet](https://github.com/AloukiUwU) & [Raphaël Rifault](https://github.com/raphaelrif)
+(Fait par [Denis Trimolet](https://github.com/AloukiUwU) & [Raphaël Rifault](https://github.com/raphaelrif))
 
 ## Qu'est ce que Vapeur ?
 
